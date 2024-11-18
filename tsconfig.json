@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2022",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "lib": [
+      "es2020",
+      "dom"
+    ],
+    "typeRoots": [
+      "@types",
+      "./node_modules/@types"
+    ],
+    "inlineSources": true,
+    "sourceRoot": "/"
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

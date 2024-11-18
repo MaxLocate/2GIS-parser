@@ -1,0 +1,25 @@
+{
+  "name": "2gis-parser",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --skipLibCheck && tsc-alias",
+    "dev": "npm run build && cross-env DEBUG=app* tsx watch src/app.ts",
+    "serve": "node dist/app.js",
+    "start": "npm run serve"
+  },
+  "devDependencies": {
+    "@types/json2csv": "^5.0.7",
+    "@types/node": "^22.9.0",
+    "tsc-alias": "^1.8.10",
+    "typescript": "^5.6.3"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "csv-writer": "^1.6.0",
+    "json2csv": "^6.0.0-alpha.2"
+  }
+}
