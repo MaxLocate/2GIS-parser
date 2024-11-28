@@ -1,7 +1,16 @@
-import {API_KEYS, API_URL_V3, MAX_REQUESTS_PER_KEY, ORGANIZATIONS_IDS} from "../constants";
+import {
+    API_KEYS,
+    API_URL_V2,
+    API_URL_V3, GENERAL_RUBRIC_IDS,
+    MAX_REQUESTS_PER_KEY,
+    ORGANIZATIONS_IDS,
+    REGIONS_IDS, RUBRIC_IDS
+} from "../constants/constants";
 import * as fs from "node:fs";
 import {AttributeGroup, IOrganisationAttributesResponse} from "../types/attributes-response.dto";
 import {IKeyItems} from "../types/keys";
+import {IRegionInfo, RegionsResponseDTO} from "../types/regions-response.dto";
+import {IRubricDTO, ISubRubricsResponseDTO} from "../types/sub-rubrics-response.dto";
 
 export class ParserService {
     private apiKey: string = API_KEYS[Math.floor(Math.random() * API_KEYS.length)];
@@ -65,7 +74,7 @@ export class ParserService {
 
     private writeOrganisationAttributesToJSON(organizationAttributes: AttributeGroup[]): void {
         const json = JSON.stringify(organizationAttributes, null, 2)
-        fs.writeFileSync('2gis-organization-attributes.json', json)
+        fs.writeFileSync('2gis-organisations-attributes.json', json)
     }
 
     /**
@@ -73,109 +82,121 @@ export class ParserService {
      * @private
      * @deprecated
      */
-    // private async retrieveOrganisationIds(): Promise<void> {
-    //     const organisationIds: number[] = [];
-    //
-    //     for (const rubricId of RUBRIC_IDS) {
-    //         const organizations: IOrganisationsByRubricIdDTO = await this.getOrganizationsByRubricId(rubricId)
-    //
-    //         console.log(`Fetched ${organizations.result?.items?.length} organizations by rubric id ${rubricId}`)
-    //
-    //         // Skip if no organizations found
-    //         if (organizations.meta.code !== 200 || !organizations.result.items) {
-    //             console.error('No organizations found by rubric id', rubricId)
-    //             continue
-    //         }
-    //
-    //         for (const item of organizations.result.items) {
-    //             organisationIds.push(parseInt(item.id))
-    //         }
-    //     }
-    //
-    //     this.writeOrganisationIdsToJSON(organisationIds)
-    // }
+    private async retrieveOrganisationIds(): Promise<void> {
+        const organisationIds: number[] = [];
 
-    /**
-     * Method to fetch all organizations by rubric id
-     * @param rubricId
-     * @private
-     * @deprecated
-     */
-    // private async getOrganizationsByRubricId(rubricId: number): Promise<IOrganisationsByRubricIdDTO> {
-    //     try {
-    //         if (this.requestCounter >= MAX_REQUESTS_PER_KEY) {
-    //             console.log('Request limit reached. Changing API key...')
-    //             this.apiKey = API_KEYS[Math.floor(Math.random() * API_KEYS.length)]
-    //         }
-    //
-    //         const organizations_url: string = `${API_URL_V3}/items?rubric_id=${rubricId}&key=${this.apiKey}`
-    //         const response = await fetch(organizations_url)
-    //
-    //         // Increment request counter
-    //         this.requestCounter++
-    //
-    //         return await response.json()
-    //     } catch (error) {
-    //         console.error('Error occurred while fetching organizations by rubric id', error)
-    //         return null
-    //     }
-    // }
+        for (const rubricId of RUBRIC_IDS) {
+            const organizations: IOrganisationsByRubricIdDTO = await this.getOrganizationsByRubricId(rubricId)
 
-    /**
-     * Method to write organization id's to JSON file
-     * @param organisationIds
-     * @private
-     * @deprecated
-     */
-    // private writeOrganisationIdsToJSON(organisationIds: number[]): void {
-    //     const json = JSON.stringify(organisationIds, null, 2)
-    //     fs.writeFileSync('2gis-organisation-ids.json', json)
-    // }
+            console.log(`Fetched ${organizations.result?.items?.length} organizations by rubric id ${rubricId}`)
+
+            // Skip if no organizations found
+            if (organizations.meta.code !== 200 || !organizations.result.items) {
+                console.error('No organizations found by rubric id', rubricId)
+                continue
+            }
+
+            for (const item of organizations.result.items) {
+                organisationIds.push(parseInt(item.id))
+            }
+        }
+
+        this.writeOrganisationIdsToJSON(organisationIds)
+    }
+
+    private async getOrganizationsByRubricId(rubricId: number): Promise<IOrganisationsByRubricIdDTO> {
+        try {
+            if (this.requestCounter >= MAX_REQUESTS_PER_KEY) {
+                console.log('Request limit reached. Changing API key...')
+                this.apiKey = API_KEYS[Math.floor(Math.random() * API_KEYS.length)]
+            }
+
+            const organizations_url: string = `${API_URL_V3}/items?rubric_id=${rubricId}&key=${this.apiKey}`
+            const response = await fetch(organizations_url)
+
+            // Increment request counter
+            this.requestCounter++
+
+            return await response.json()
+        } catch (error) {
+            console.error('Error occurred while fetching organizations by rubric id', error)
+            return null
+        }
+    }
+
+    private writeOrganisationIdsToJSON(organisationIds: number[]): void {
+        const json = JSON.stringify(organisationIds, null, 2)
+        fs.writeFileSync('2gis-organisation-ids.json', json)
+    }
 
     // ------------------ RUBRICS ------------------
 
-    // public async retrieveRubrics(): Promise<void> {
-    //     const rubrics: IRubricDTO[] = [];
-    //
-    //     for (const regionId of REGIONS_IDS) {
-    //         for (const rubricId of GENERAL_RUBRIC_IDS) {
-    //             // Check if in rubrics array already exists rubric with the same id, if so - skip
-    //             if (rubrics.find(rubric => parseInt(rubric.id) === rubricId)) continue
-    //             const subRubric = await this.getRubricId(regionId, rubricId)
-    //
-    //             if (subRubric) rubrics.push(subRubric.result.items[0])
-    //         }
-    //     }
-    //
-    //     this.writeRubricsResponseToJSON(rubrics)
-    //     // this.writeRubricsIdsToJSON(rubrics)
-    // }
+    public async retrieveRubrics(): Promise<void> {
+        const rubrics: IRubricDTO[] = [];
 
-    // private async getRubricId(regionId: number, rubricId: number): Promise<ISubRubricsResponseDTO | null> {
-    //     try {
-    //         if (this.requestCounter >= MAX_REQUESTS_PER_KEY) {
-    //             console.log('Request limit reached. Changing API key...')
-    //             this.changeKeyState(this.apiKey)
-    //             this.apiKey = this.getAnyActiveKey()
-    //         }
-    //
-    //         const subRubrics_url: string = `${API_URL_V2}/catalog/rubric/get?region_id=${regionId}&id=${rubricId}&fields=items.rubrics&key=${this.apiKey}`
-    //         const response = await fetch(subRubrics_url)
-    //
-    //         // Increment request counter
-    //         this.requestCounter++
-    //
-    //         return await response.json()
-    //     } catch (error) {
-    //         console.error('Error occurred while fetching rubric id', error)
-    //         return null
-    //     }
-    // }
-    //
-    // private writeRubricsResponseToJSON(rubrics: IRubricDTO[]): void {
-    //     const json = JSON.stringify(rubrics, null, 2)
-    //     fs.writeFileSync('2gis-rubrics.json', json)
-    // }
+        for (const regionId of REGIONS_IDS) {
+            for (const rubricId of GENERAL_RUBRIC_IDS) {
+                // Check if in rubrics array already exists rubric with the same id, if so - skip
+                if (rubrics.find(rubric => parseInt(rubric.id) === rubricId)) continue
+                const subRubric = await this.getRubricId(regionId, rubricId)
+
+                if (subRubric) rubrics.push(subRubric.result.items[0])
+            }
+        }
+
+        this.writeRubricsResponseToJSON(rubrics)
+        // this.writeRubricsIdsToJSON(rubrics)
+    }
+
+    private async getRubricId(regionId: number, rubricId: number): Promise<ISubRubricsResponseDTO | null> {
+        try {
+            if (this.requestCounter >= MAX_REQUESTS_PER_KEY) {
+                console.log('Request limit reached. Changing API key...')
+                this.changeKeyState(this.apiKey)
+                this.apiKey = this.getAnyActiveKey()
+            }
+
+            const subRubrics_url: string = `${API_URL_V2}/catalog/rubric/get?region_id=${regionId}&id=${rubricId}&fields=items.rubrics&key=${this.apiKey}`
+            const response = await fetch(subRubrics_url)
+
+            // Increment request counter
+            this.requestCounter++
+
+            return await response.json()
+        } catch (error) {
+            console.error('Error occurred while fetching rubric id', error)
+            return null
+        }
+    }
+
+    private writeRubricsResponseToJSON(rubrics: IRubricDTO[]): void {
+        const json = JSON.stringify(rubrics, null, 2)
+        fs.writeFileSync('2gis-rubrics.json', json)
+    }
+
+    /**
+     * Method to fetch all region id's by country code
+     * @returns Promise<IRegionInfo[]> - Array of region id's
+     * @deprecated
+     */
+    private async getRegionIds(): Promise<IRegionInfo[]> {
+        const regions_url: string = `${API_URL_V2}/region/list?country_code_filter=kz&key=${this.apiKey}`
+
+        try {
+            const response = await fetch(regions_url)
+            const respJson: RegionsResponseDTO = await response.json()
+
+            return respJson.result.items.map(region => {
+                return {
+                    region_id: parseInt(region.id),
+                    city: region.name
+                }
+            })
+        } catch (error) {
+            console.error('Error occurred while fetching region ids', error)
+            return []
+        }
+    }
 
     // -------------------- KEYS -------------------
     public getAnyActiveKey(): string {
@@ -202,29 +223,4 @@ export class ParserService {
         }
     }
 
-    // ------------------ DEPRECATED ----------------
-
-    /**
-     * Method to fetch all region id's by country code
-     * @returns Promise<IRegionInfo[]> - Array of region id's
-     * @deprecated
-     */
-    // private async getRegionIds(): Promise<IRegionInfo[]> {
-    //     const regions_url: string = `${API_URL_V2}/region/list?country_code_filter=${COUNTRY}&key=${this.apiKey}`
-    //
-    //     try {
-    //         const response = await fetch(regions_url)
-    //         const respJson: RegionsResponseDTO = await response.json()
-    //
-    //         return respJson.result.items.map(region => {
-    //             return {
-    //                 region_id: parseInt(region.id),
-    //                 city: region.name
-    //             }
-    //         })
-    //     } catch (error) {
-    //         console.error('Error occurred while fetching region ids', error)
-    //         return []
-    //     }
-    // }
 }
