@@ -5,13 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="483a4cab-4d2f-4354-ade7-3c9cf2a48b1d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/keys.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/file-response.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/krasota.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/keys.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/2gis-organization-attributes.json" beforeDir="false" afterPath="$PROJECT_DIR$/resources/2gis-organisations-attributes.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/constants/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/constants.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/parser.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/parser.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/constants.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/organizations.json" beforeDir="false" afterPath="$PROJECT_DIR$/resources/organizations.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/parser.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/attributes-response.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/cities-rubrics.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/keys.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/organisations-response.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/regions-response.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/rubrics-response.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/sub-rubrics-response.dto.ts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +67,7 @@
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/new__approach__to__parse&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/vadymchornyi/Development/ProBody/2gis-parser&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
@@ -78,8 +89,8 @@
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$/resources" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/resources" />
       <recent name="$PROJECT_DIR$/src/resources" />
       <recent name="$PROJECT_DIR$/src/constants" />
     </key>

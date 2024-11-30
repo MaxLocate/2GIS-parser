@@ -1,17 +1,17 @@
 export const API_URL_V2 = 'https://catalog.api.2gis.com/2.0';
 export const API_URL_V3 = 'https://catalog.api.2gis.com/3.0';
 
-// export const COUNTRY: string = 'kz'
+export const COUNTRY: string = 'kz'
 
-export const REGIONS_IDS: number[] = [
-    196, 167, 67, 68, 168, 242, 84, 201, 203,
-    240, 111, 170, 169, 221, 232, 162, 91, 161, 252
-];
-
-export const GENERAL_RUBRIC_IDS: number[] = [
-    5419, 42903, 1, 2, 19532, 10, 3, 4, 787, 5, 112663, 13, 15, 6,
-    1035, 1621, 14, 7, 8, 42867, 9, 42872, 746, 6547, 12, 11, 42863, 969
-]
+// export const REGIONS_IDS: number[] = [
+//     196, 167, 67, 68, 168, 242, 84, 201, 203,
+//     240, 111, 170, 169, 221, 232, 162, 91, 161, 252
+// ];
+//
+// export const GENERAL_RUBRIC_IDS: number[] = [
+//     5419, 42903, 1, 2, 19532, 10, 3, 4, 787, 5, 112663, 13, 15, 6,
+//     1035, 1621, 14, 7, 8, 42867, 9, 42872, 746, 6547, 12, 11, 42863, 969
+// ]
 
 export const RUBRIC_IDS: number[] = [
     122, 59508, 112854, 143, 112882, 227, 1644, 151, 717, 707, 9867, 425, 404, 524, 405,
