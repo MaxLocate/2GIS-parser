@@ -32,8 +32,6 @@ const parseJSONFile = async (filePath: string): Promise<any> => {
     }
 };
 
-
-
 // Constants
 const BASE_URL = "https://catalog.api.2gis.com/3.0";
 const PHOTO_URL = "https://api.photo.2gis.com/3.0";
@@ -43,8 +41,8 @@ const API_KEY = "8be06704-a318-43ab-8510-b5d8bce96239"; // Replace with your act
 const PHOTOS_KEY = "gYu1s9N1wP"; // Replace with your actual API key
 const REVIEWS_KEY = "b0209295-ae15-48b2-acb2-58309b333c37"; // Replace with your actual API key
 
-const INPUT_FILE = path.resolve(__dirname, 'aktau.json');
-const OUTPUT_FILE = path.resolve(__dirname, 'aktau_full.json');
+const INPUT_FILE = path.resolve(__dirname, '../city.json');
+const OUTPUT_FILE = path.resolve(__dirname, '../city_full.json');
 
 // Utility function to fetch data from API
 const fetchData = async (url: string): Promise<any> => {
