@@ -17,7 +17,10 @@ const PHOTOS_KEY = "gYu1s9N1wP"; // Replace with your actual API key
 const REVIEWS_KEY = "b0209295-ae15-48b2-acb2-58309b333c37"; // Replace with your actual API key
 
 const INPUT_FILE = path.resolve(__dirname, '../city.json');
-const OUTPUT_FILE = path.resolve(__dirname, '../city_full.json');
+const OUTPUT_FILE_TEMP = path.resolve(__dirname, '../city_full.json');
+
+// Configurations
+const BATCH_SIZE = 10; // Number of organizations to process in memory
 
 // Utility function: Log with timestamp
 const log = (message: string) => {
@@ -96,8 +99,36 @@ const fetchOrganizationDetails = async (organizationId: string) => {
     }
 };
 
-// Main function
-const processOrganizations = async () => {
+// Save a batch of data to a file
+const saveBatchToFile = async (batch: any[]) => {
+    try {
+        const data = batch.map(org => JSON.stringify(org)).join(',');
+        const isFirstBatch = !(await fs.stat(OUTPUT_FILE_TEMP).catch(() => false)); // Check if file exists
+
+        if (isFirstBatch) {
+            await fs.writeFile(OUTPUT_FILE_TEMP, `[${data}`, 'utf-8'); // Start JSON array
+        } else {
+            await fs.appendFile(OUTPUT_FILE_TEMP, `,${data}`, 'utf-8'); // Append to JSON array
+        }
+
+        log(`Saved batch of ${batch.length} organizations to file.`);
+    } catch (error) {
+        log(`Error saving batch to file: ${error.message}`);
+    }
+};
+
+// Finalize JSON file by closing the array
+const finalizeOutputFile = async () => {
+    try {
+        await fs.appendFile(OUTPUT_FILE_TEMP, ']', 'utf-8'); // Close JSON array
+        log('Finalized output JSON file.');
+    } catch (error) {
+        log(`Error finalizing output file: ${error.message}`);
+    }
+};
+
+// Main function with batching
+const processOrganizationsWithBatching = async () => {
     try {
         const organizations = await parseJSONFile(INPUT_FILE);
         if (!Array.isArray(organizations)) {
@@ -107,7 +138,7 @@ const processOrganizations = async () => {
         const totalOrganizations = organizations.length;
         log(`Found ${totalOrganizations} organizations in the input file.`);
 
-        const updatedOrganizations = [];
+        const batch = [];
         for (const [index, organization] of organizations.entries()) {
             const progress = `[${index + 1} of ${totalOrganizations}]`;
 
@@ -119,18 +150,28 @@ const processOrganizations = async () => {
 
             log(`${progress} Processing organization ID: ${organizationId}`);
             const details = await fetchOrganizationDetails(organizationId);
-            updatedOrganizations.push({ ...organization, details });
+            batch.push({ ...organization, details });
+
+            if (batch.length >= BATCH_SIZE) {
+                await saveBatchToFile(batch);
+                batch.length = 0; // Clear the batch
+            }
 
             // Optional: Delay to respect API rate limits
             await new Promise((resolve) => setTimeout(resolve, 1000));
         }
 
-        await fs.writeFile(OUTPUT_FILE, JSON.stringify(updatedOrganizations, null, 2), 'utf-8');
-        log(`Updated data saved to ${OUTPUT_FILE}`);
+        // Save remaining organizations
+        if (batch.length > 0) {
+            await saveBatchToFile(batch);
+        }
+
+        // Finalize the JSON file
+        await finalizeOutputFile();
     } catch (error) {
         log(`Critical error during processing: ${error.message}`);
     }
 };
 
-// Run script
-processOrganizations();
+// Run the script
+processOrganizationsWithBatching();
